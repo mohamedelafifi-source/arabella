@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("arabella")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a8873cad64c9101c84057b6a9ce5137992efb53")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4584ce24a8f76e9315f919094dfe08ecbc501d3a")]
 [assembly: System.Reflection.AssemblyProductAttribute("arabella")]
 [assembly: System.Reflection.AssemblyTitleAttribute("arabella")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

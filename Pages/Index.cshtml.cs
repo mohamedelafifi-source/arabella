@@ -5,8 +5,10 @@ namespace arabella.Pages;
 
 public class IndexModel : PageModel
 {
-    public void OnGet()
+    public IActionResult OnGet()
     {
-
+        if (HttpContext.Session.GetString("Auth") == "1")
+            return RedirectToPage("/Units/Index");
+        return RedirectToPage("/Login");
     }
 }

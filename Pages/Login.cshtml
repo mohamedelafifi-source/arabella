@@ -1,0 +1,23 @@
+@page
+@model arabella.Pages.LoginModel
+@{
+    ViewData["Title"] = "دخول — أرابيلا";
+    Layout = "_LayoutArabella";
+}
+<div class="arabella-page">
+    <div class="arabella-card">
+        <h1 class="arabella-title">أرابيلا</h1>
+        <p class="arabella-subtitle">إدارة الوحدات — أدخل كلمة المرور</p>
+        <form method="post" class="arabella-form">
+            <div class="mb-3">
+                <label for="Password" class="form-label">كلمة المرور</label>
+                <input type="password" id="Password" name="Password" class="form-control" autocomplete="current-password" required autofocus />
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <p class="text-danger mb-2">@Model.Message</p>
+            }
+            <button type="submit" class="btn btn-primary w-100">دخول</button>
+        </form>
+    </div>
+</div>

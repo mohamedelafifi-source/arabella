@@ -1,14 +1,22 @@
 is_global = true
 build_property.TargetFramework = net10.0
-build_property.TargetFrameworkIdentifier = .NETCoreApp
-build_property.TargetFrameworkVersion = v10.0
+build_property.TargetFramework = net10.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
 build_property.RootNamespace = arabella
 build_property.RootNamespace = arabella
 build_property.ProjectDir = C:\Users\asus\desktop\arabella\arabella\
@@ -30,12 +38,44 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/asus/desktop/arabella/arabella/Pages/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/asus/desktop/arabella/arabella/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/asus/desktop/arabella/arabella/Pages/Shared/_LayoutArabella.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXRBcmFiZWxsYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/asus/desktop/arabella/arabella/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Units/Cars/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdHNcQ2Fyc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Units/Children/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdHNcQ2hpbGRyZW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Units/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Units/Infractions/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdHNcSW5mcmFjdGlvbnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Units/Pets/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdHNcUGV0c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Units/Phones/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdHNcUGhvbmVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/asus/desktop/arabella/arabella/Pages/_ViewImports.cshtml]

@@ -1,0 +1,10 @@
+@page "{unitNumber}"
+@model arabella.Pages.Units.Pets.IndexModel
+@{
+    ViewData["Title"] = "حيوانات أليفة — أرابيلا";
+    Layout = "_LayoutArabella";
+}
+<div class="container">
+    <p class="text-muted">حيوانات أليفة الوحدة @Model.UnitNumber — قريباً</p>
+    <a asp-page="/Units/Index" asp-route-index="@Model.UnitIndex" class="btn btn-outline-secondary">العودة للوحدة</a>
+</div>

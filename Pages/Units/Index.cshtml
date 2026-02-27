@@ -1,0 +1,85 @@
+@page "{index?}"
+@model arabella.Pages.Units.IndexModel
+@{
+    ViewData["Title"] = "الوحدات — أرابيلا";
+    Layout = "_LayoutArabella";
+}
+
+<div class="container">
+    <h1 class="mb-3">الوحدات</h1>
+
+    <div class="units-toolbar">
+        @if (!Model.IsViewOnly)
+        {
+            <a asp-page="/Units/Index" asp-route-index="-1" class="btn btn-success">وحدة جديدة</a>
+        }
+        @if (Model.TotalCount > 0)
+        {
+            var prev = (Model.CurrentIndex ?? 0) - 1;
+            var next = (Model.CurrentIndex ?? 0) + 1;
+            <a asp-page="/Units/Index" asp-route-index="@prev" class="btn btn-outline-secondary">السابق</a>
+            <a asp-page="/Units/Index" asp-route-index="@next" class="btn btn-outline-secondary">التالي</a>
+        }
+        <form method="post" asp-page-handler="Exit" class="d-inline">
+            <button type="submit" class="btn btn-outline-danger">خروج</button>
+        </form>
+        @if (Model.IsViewOnly)
+        {
+            <span class="align-middle text-muted">عرض فقط</span>
+        }
+    </div>
+
+    @if (Model.TotalCount > 0)
+    {
+        <p class="text-muted">@((Model.CurrentIndex ?? 0) + 1) من @Model.TotalCount</p>
+    }
+
+    <div class="units-form-card">
+        <h2>@(Model.Current == null ? "وحدة جديدة" : "الوحدة الحالية")</h2>
+        <form method="post" asp-page-handler="Save">
+            <div class="row g-2 mb-2">
+                <div class="col-md-4">
+                    <label class="form-label">رقم الوحدة</label>
+                    <input type="text" name="input.UnitNumber" class="form-control" maxlength="10" value="@Model.Current?.UnitNumber" required @(Model.Current != null ? "readonly" : "") />
+                </div>
+            </div>
+            <div class="row g-2 mb-2">
+                <div class="col-md-4"><label class="form-label">اسم المالك</label><input type="text" name="input.OwnerName" class="form-control" maxlength="40" value="@Model.Current?.OwnerName" @(Model.IsViewOnly ? "readonly" : "") /></div>
+                <div class="col-md-4"><label class="form-label">هوية المالك</label><input type="text" name="input.OwnerId" class="form-control" maxlength="20" value="@Model.Current?.OwnerId" @(Model.IsViewOnly ? "readonly" : "") /></div>
+                <div class="col-md-4"><label class="form-label">البريد المالك</label><input type="text" name="input.OwnerMailAddress" class="form-control" maxlength="30" value="@Model.Current?.OwnerMailAddress" @(Model.IsViewOnly ? "readonly" : "") /></div>
+            </div>
+            <div class="row g-2 mb-2">
+                <div class="col-md-4"><label class="form-label">اسم المستخدم</label><input type="text" name="input.UserName" class="form-control" maxlength="40" value="@Model.Current?.UserName" @(Model.IsViewOnly ? "readonly" : "") /></div>
+                <div class="col-md-4"><label class="form-label">هوية المستخدم</label><input type="text" name="input.UserId" class="form-control" maxlength="20" value="@Model.Current?.UserId" @(Model.IsViewOnly ? "readonly" : "") /></div>
+                <div class="col-md-4"><label class="form-label">البريد المستخدم</label><input type="text" name="input.UserMailAddress" class="form-control" maxlength="30" value="@Model.Current?.UserMailAddress" @(Model.IsViewOnly ? "readonly" : "") /></div>
+            </div>
+            <div class="row g-2 mb-2">
+                <div class="col-md-4"><label class="form-label">اسم الزوج/ة</label><input type="text" name="input.SpouseName" class="form-control" maxlength="40" value="@Model.Current?.SpouseName" @(Model.IsViewOnly ? "readonly" : "") /></div>
+                <div class="col-md-4"><label class="form-label">هوية الزوج/ة</label><input type="text" name="input.SpouseId" class="form-control" maxlength="20" value="@Model.Current?.SpouseId" @(Model.IsViewOnly ? "readonly" : "") /></div>
+                <div class="col-md-4"><label class="form-label">ملاحظات / خبرة</label><input type="text" name="input.Experience" class="form-control" maxlength="40" value="@Model.Current?.Experience" @(Model.IsViewOnly ? "readonly" : "") /></div>
+            </div>
+            @if (!Model.IsViewOnly)
+            {
+                <button type="submit" class="btn btn-primary mt-2">حفظ</button>
+            }
+        </form>
+
+        @if (Model.Current != null && !Model.IsViewOnly)
+        {
+            <form method="post" asp-page-handler="Delete" asp-route-unitNumber="@Model.Current.UnitNumber" class="d-inline mt-2" onsubmit="return confirm('حذف هذه الوحدة؟');">
+                <button type="submit" class="btn btn-danger">حذف</button>
+            </form>
+        }
+    </div>
+
+    @if (Model.Current != null)
+    {
+        <div class="units-links">
+            <a asp-page="/Units/Phones/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">هواتف</a>
+            <a asp-page="/Units/Cars/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">سيارات</a>
+            <a asp-page="/Units/Children/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">أطفال</a>
+            <a asp-page="/Units/Pets/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">حيوانات أليفة</a>
+            <a asp-page="/Units/Infractions/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">مخالفات</a>
+        </div>
+    }
+</div>
