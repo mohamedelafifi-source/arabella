@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أرابيلا | Arabella</title>
+  <meta name="description" content="مشروع أرابيلا — موقع ويب بالعربية">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <nav class="nav">
+        <a href="#" class="logo">أرابيلا</a>
+        <ul class="nav-list">
+          <li><a href="#about">من نحن</a></li>
+          <li><a href="#contact">تواصل</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section id="about" class="section section--first">
+        <h2 class="section-title">من نحن</h2>
+        <p class="section-text">
+          أرابيلا مشروع ويب يضع تجربة القارئ العربي في المقدمة. التصميم متجاوب، والخطوط واضحة، والاتجاه من اليمين إلى اليسار مضبوط في كل الصفحة.
+        </p>
+      </section>
+
+      <section id="contact" class="section section--alt">
+        <h2 class="section-title">تواصل معنا</h2>
+        <p class="section-text">نرحب بملاحظاتك واستفساراتك.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© أرابيلا — مشروع ويب عربي</p>
+    </footer>
+  </div>
+
+  <dialog id="password-dialog" class="password-dialog" aria-labelledby="password-dialog-title">
+    <form id="password-form" class="password-form" method="dialog">
+      <h2 id="password-dialog-title" class="password-dialog-title">أدخل كلمة المرور</h2>
+      <label for="password-input" class="password-label">كلمة المرور</label>
+      <input type="password" id="password-input" class="password-input" autocomplete="current-password" required placeholder="••••••••">
+      <p id="password-error" class="password-error" role="alert" hidden>كلمة المرور غير صحيحة.</p>
+      <button type="submit" class="btn btn-primary">دخول</button>
+    </form>
+  </dialog>
+
+  <script src="main.js?v=2"></script>
+</body>
+</html>
