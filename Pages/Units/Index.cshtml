@@ -37,7 +37,7 @@
 
     <div class="units-form-card">
         <h2>@(Model.Current == null ? "وحدة جديدة" : "الوحدة الحالية")</h2>
-        <form method="post" asp-page-handler="Save">
+        <form id="save-form" method="post" asp-page-handler="Save">
             <div class="row g-2 mb-2">
                 <div class="col-md-4">
                     <label class="form-label">رقم الوحدة</label>
@@ -59,10 +59,11 @@
                 <div class="col-md-4"><label class="form-label">هوية الزوج/ة</label><input type="text" name="input.SpouseId" class="form-control" maxlength="20" value="@Model.Current?.SpouseId" @(Model.IsViewOnly ? "readonly" : "") /></div>
                 <div class="col-md-4"><label class="form-label">ملاحظات / خبرة</label><input type="text" name="input.Experience" class="form-control" maxlength="40" value="@Model.Current?.Experience" @(Model.IsViewOnly ? "readonly" : "") /></div>
             </div>
+        </form>
             @if (!Model.IsViewOnly)
             {
                 <div class="d-flex flex-wrap gap-2 mt-2 align-items-center">
-                    <button type="submit" class="btn btn-primary">تحديث</button>
+                    <button type="submit" form="save-form" class="btn btn-primary">تحديث</button>
                     @if (Model.Current != null)
                     {
                         <form method="post" asp-page-handler="Delete" asp-route-unitNumber="@Model.Current.UnitNumber" class="d-inline" onsubmit="return confirm('هل أنت متأكد من حذف هذه الوحدة؟');">
@@ -71,13 +72,12 @@
                     }
                 </div>
             }
-        </form>
     </div>
 
     @if (Model.Current != null)
     {
         <div class="units-links mt-3">
-            <a asp-page="/Units/Children/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">أطفال</a>
+            <a asp-page="/Units/Children/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">أولاد</a>
             <a asp-page="/Units/Phones/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">هواتف</a>
             <a asp-page="/Units/Cars/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">سيارات</a>
             <a asp-page="/Units/Pets/Index" asp-route-unitNumber="@Model.Current.UnitNumber" asp-route-unitIndex="@Model.CurrentIndex" class="btn btn-outline-secondary">حيوانات أليفة</a>
