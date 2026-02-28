@@ -1,0 +1,18 @@
+@page
+@model arabella.Pages.HomeModel
+@{
+    ViewData["Title"] = "أرابيلا — القائمة الرئيسية";
+    Layout = "_LayoutArabella";
+}
+
+<div class="container">
+    <h1 class="mb-4">اختر الخطوة التالية</h1>
+    <div class="d-flex flex-column gap-3" style="max-width: 20rem;">
+        <a asp-page="/Units/Index" class="btn btn-primary btn-lg">١ — بيانات</a>
+        <a asp-page="/Search/Index" class="btn btn-outline-secondary btn-lg">٢ — بحث</a>
+        <a asp-page="/Utilities/Index" class="btn btn-outline-secondary btn-lg">٣ — أدوات</a>
+    </div>
+    <form method="post" asp-page-handler="Logout" class="mt-4">
+        <button type="submit" class="btn btn-outline-danger">خروج</button>
+    </form>
+</div>

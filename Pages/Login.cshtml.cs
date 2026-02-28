@@ -16,7 +16,7 @@ public class LoginModel : PageModel
     public IActionResult OnGet()
     {
         if (HttpContext.Session.GetString("Auth") == "1")
-            return RedirectToPage("/Units/Index");
+            return RedirectToPage("/Home");
         return Page();
     }
 
@@ -26,13 +26,13 @@ public class LoginModel : PageModel
         {
             HttpContext.Session.SetString("Auth", "1");
             HttpContext.Session.SetString("Role", "Admin");
-            return RedirectToPage("/Units/Index");
+            return RedirectToPage("/Home");
         }
         if (Password == PasswordViewOnly)
         {
             HttpContext.Session.SetString("Auth", "1");
             HttpContext.Session.SetString("Role", "ViewOnly");
-            return RedirectToPage("/Units/Index");
+            return RedirectToPage("/Home");
         }
         Message = "كلمة المرور غير صحيحة.";
         return Page();

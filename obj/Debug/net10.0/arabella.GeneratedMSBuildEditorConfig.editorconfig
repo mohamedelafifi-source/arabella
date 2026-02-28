@@ -34,6 +34,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/asus/desktop/arabella/arabella/Pages/Home.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/asus/desktop/arabella/arabella/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -44,6 +48,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/asus/desktop/arabella/arabella/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Search/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/asus/desktop/arabella/arabella/Pages/Shared/_LayoutArabella.cshtml]
@@ -76,6 +84,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/asus/desktop/arabella/arabella/Pages/Units/Phones/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdHNcUGhvbmVzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/asus/desktop/arabella/arabella/Pages/Utilities/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXRpbGl0aWVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/asus/desktop/arabella/arabella/Pages/_ViewImports.cshtml]

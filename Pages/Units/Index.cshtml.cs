@@ -97,7 +97,6 @@ public class IndexModel : PageModel
 
     public IActionResult OnPostExit()
     {
-        HttpContext.Session.Clear();
-        return RedirectToPage("/Login");
+        return RedirectToPage("/Home");
     }
 }
