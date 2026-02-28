@@ -65,7 +65,7 @@
                     <button type="submit" class="btn btn-primary">تحديث</button>
                     @if (Model.Current != null)
                     {
-                        <form method="post" asp-page-handler="Delete" asp-route-unitNumber="@Model.Current.UnitNumber" class="d-inline" onsubmit="return confirm('حذف هذه الوحدة؟');">
+                        <form method="post" asp-page-handler="Delete" asp-route-unitNumber="@Model.Current.UnitNumber" class="d-inline" onsubmit="return confirm('هل أنت متأكد من حذف هذه الوحدة؟');">
                             <button type="submit" class="btn btn-danger">حذف</button>
                         </form>
                     }
