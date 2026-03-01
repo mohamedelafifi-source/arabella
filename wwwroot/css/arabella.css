@@ -133,3 +133,7 @@
 }
 
 .form-control:focus { border-color: var(--arabella-primary); box-shadow: 0 0 0 0.2rem rgba(166, 124, 0, 0.25); }
+
+/* Pets page */
+.pets-card { font-size: 0.875rem; }
+.pets-add-form .btn-group .btn { font-size: 0.8125rem; }

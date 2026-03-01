@@ -20,6 +20,11 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated();
+    // Add Pet columns if they were added to the model after the DB was first created
+    try { db.Database.ExecuteSqlRaw("ALTER TABLE Pets ADD COLUMN Size TEXT;"); }
+    catch (Microsoft.Data.Sqlite.SqliteException ex) when (ex.Message?.Contains("duplicate column", StringComparison.OrdinalIgnoreCase) == true) { }
+    try { db.Database.ExecuteSqlRaw("ALTER TABLE Pets ADD COLUMN Color TEXT;"); }
+    catch (Microsoft.Data.Sqlite.SqliteException ex) when (ex.Message?.Contains("duplicate column", StringComparison.OrdinalIgnoreCase) == true) { }
 }
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,43 @@
+@model arabella.Pages.Units.Pets.PetListViewModel
+@{
+    Layout = null;
+}
+<div id="pet-list-content">
+    @if (Model.Pets.Count == 0)
+    {
+        <p class="text-muted mb-0">لا توجد حيوانات مسجّلة لهذه الوحدة.</p>
+    }
+    else
+    {
+        <div class="row g-2">
+            @foreach (var pet in Model.Pets)
+            {
+                <div class="col-12 col-md-6" data-pet-id="@pet.Id">
+                    <div class="card pets-card">
+                        <div class="card-body py-2 px-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <div>
+                                <span class="badge bg-secondary">@(pet.Type == "Cat" ? "قط" : "كلب")</span>
+                                @if (!string.IsNullOrEmpty(pet.Size))
+                                {
+                                    <span class="badge bg-light text-dark">@(pet.Size == "Small" ? "صغير" : pet.Size == "Medium" ? "متوسط" : pet.Size == "Large" ? "كبير" : pet.Size)</span>
+                                }
+                                <span class="ms-1">@pet.Color</span>
+                                @if (!string.IsNullOrEmpty(pet.PetId))
+                                {
+                                    <span class="ms-1 text-muted small">طوق: <span dir="ltr">@pet.PetId</span></span>
+                                }
+                            </div>
+                            <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" disabled title="قريباً — صورة">عرض الصورة</button>
+                                @if (!Model.IsViewOnly)
+                                {
+                                    <button type="button" class="btn btn-sm btn-danger btn-delete-pet" data-id="@pet.Id" data-unit="@Model.UnitNumber">حذف</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

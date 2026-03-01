@@ -63,6 +63,8 @@ public class AppDbContext : DbContext
             e.HasKey(p => p.Id);
             e.Property(p => p.UnitNumber).HasMaxLength(10);
             e.Property(p => p.Type).HasMaxLength(30);
+            e.Property(p => p.Size).HasMaxLength(20);
+            e.Property(p => p.Color).HasMaxLength(50);
             e.Property(p => p.PetId).HasMaxLength(10);
             e.HasOne(p => p.Unit).WithMany(u => u.Pets).HasForeignKey(p => p.UnitNumber).OnDelete(DeleteBehavior.Cascade);
         });

@@ -195,7 +195,7 @@ C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\rjsmcshtml.dswa.cache.
 C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\scopedcss\bundle\arabella.styles.css
 C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\scopedcss\projectbundle\arabella.bundle.scp.css
-C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\compressed\6ymsu3y7uz-{0}-vx329w0wiu-vx329w0wiu.gz
+C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\compressed\6ymsu3y7uz-{0}-a2rlm5360i-a2rlm5360i.gz
 C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\compressed\em4cvz743i-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\compressed\l8ioylj69j-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\asus\desktop\arabella\arabella\obj\Debug\net10.0\compressed\c6oj8w9rkn-{0}-loiban7lej-loiban7lej.gz

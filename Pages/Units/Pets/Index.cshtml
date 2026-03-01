@@ -3,8 +3,182 @@
 @{
     ViewData["Title"] = "حيوانات أليفة — أرابيلا";
     Layout = "_LayoutArabella";
+    var listModel = new arabella.Pages.Units.Pets.PetListViewModel { Pets = Model.Pets, UnitNumber = Model.UnitNumber, UnitIndex = Model.UnitIndex, IsViewOnly = Model.IsViewOnly };
 }
 <div class="container">
-    <p class="text-muted">حيوانات أليفة الوحدة @Model.UnitNumber — قريباً</p>
-    <a asp-page="/Units/Index" asp-route-index="@Model.UnitIndex" class="btn btn-outline-secondary">العودة للوحدة</a>
+    <form method="post" style="display:none;" id="antiforgery-form"></form>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <a asp-page="/Units/Index" asp-route-index="@Model.UnitIndex" class="btn btn-outline-secondary">العودة للوحدة</a>
+        <span class="text-muted">الوحدة @Model.UnitNumber</span>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header py-2">
+            <h2 class="h6 mb-0">حيوانات هذه الوحدة</h2>
+        </div>
+        <div class="card-body py-2" id="pet-list">
+            @await Html.PartialAsync("_PetList", listModel)
+        </div>
+    </div>
+
+    @if (!Model.IsViewOnly && Model.Pets.Count < 5)
+    {
+        <div class="card">
+            <div class="card-header py-2">
+                <h2 class="h6 mb-0">إضافة حيوان أليف</h2>
+            </div>
+            <div class="card-body py-2">
+                <form id="add-pet-form" class="pets-add-form">
+                    <input type="hidden" name="unitNumber" value="@Model.UnitNumber" />
+                    <div class="d-flex flex-wrap align-items-end gap-3 mb-2">
+                        <div>
+                            <label class="form-label small mb-0">نوع</label>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="type" id="type-cat" value="Cat" required>
+                                <label class="btn btn-outline-secondary" for="type-cat">قط</label>
+                                <input type="radio" class="btn-check" name="type" id="type-dog" value="Dog">
+                                <label class="btn btn-outline-secondary" for="type-dog">كلب</label>
+                            </div>
+                        </div>
+                        <div id="size-group" class="d-none">
+                            <label class="form-label small mb-0">الحجم</label>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="size" id="size-small" value="Small">
+                                <label class="btn btn-outline-secondary" for="size-small">صغير</label>
+                                <input type="radio" class="btn-check" name="size" id="size-medium" value="Medium">
+                                <label class="btn btn-outline-secondary" for="size-medium">متوسط</label>
+                                <input type="radio" class="btn-check" name="size" id="size-large" value="Large">
+                                <label class="btn btn-outline-secondary" for="size-large">كبير</label>
+                            </div>
+                        </div>
+                        <div id="collar-group" class="d-none">
+                            <label class="form-label small mb-0" for="collarId">رقم طوق الكلب</label>
+                            <input type="text" name="collarId" id="collarId" class="form-control form-control-sm" maxlength="10" pattern="[0-9]*" placeholder="حتى 10 أرقام (اختياري)" style="width:9rem;" dir="ltr" />
+                        </div>
+                        <div>
+                            <label class="form-label small mb-0" for="color">اللون</label>
+                            <select name="color" id="color" class="form-select form-select-sm" style="width:auto; min-width:8rem;">
+                                <option value="">— اختر —</option>
+                                @foreach (var c in IndexModel.PetColors)
+                                {
+                                    <option value="@c">@c</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="text-muted small">صورة — قريباً</div>
+                        <button type="submit" class="btn btn-primary btn-sm" id="btn-add-pet" disabled>إضافة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    else if (Model.IsViewOnly)
+    {
+        <p class="text-muted small">عرض فقط — لا يمكن إضافة حيوانات.</p>
+    }
+    else if (Model.Pets.Count >= 5)
+    {
+        <p class="text-muted small">الحد الأقصى 5 حيوانات لهذه الوحدة.</p>
+    }
 </div>
+
+@section Scripts {
+<script>
+(function () {
+    var unitNumber = '@Model.UnitNumber';
+    var hadMaxPets = @(Model.Pets.Count >= 5 ? "true" : "false");
+    var token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+    function getToken() {
+        if (!token) token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        return token;
+    }
+
+    function bindDeleteButtons() {
+        document.querySelectorAll('.btn-delete-pet').forEach(function(btn) {
+            btn.onclick = function() {
+                var id = this.getAttribute('data-id');
+                var u = this.getAttribute('data-unit');
+                if (!confirm('إزالة هذا الحيوان؟')) return;
+                var formData = new FormData();
+                formData.append('__RequestVerificationToken', getToken());
+                formData.append('unitNumber', u);
+                formData.append('id', id);
+                fetch('?handler=DeletePet', { method: 'POST', body: formData, headers: { 'RequestVerificationToken': getToken(), 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function(r) { return r.text(); })
+                    .then(function(html) {
+                        var el = document.getElementById('pet-list');
+                        if (el) el.innerHTML = html;
+                        bindDeleteButtons();
+                        var cardCount = document.querySelectorAll('.pets-card').length;
+                        if (hadMaxPets && cardCount < 5) window.location.reload();
+                    }).catch(function() {});
+            };
+        });
+    }
+
+    document.getElementById('type-cat').addEventListener('change', function() {
+        document.getElementById('size-group').classList.add('d-none');
+        document.getElementById('collar-group').classList.add('d-none');
+        document.querySelectorAll('input[name="size"]').forEach(function(r) { r.checked = false; r.removeAttribute('required'); });
+        document.getElementById('collarId').value = '';
+        document.getElementById('collarId').removeAttribute('required');
+    });
+    document.getElementById('type-dog').addEventListener('change', function() {
+        document.getElementById('size-group').classList.remove('d-none');
+        document.getElementById('collar-group').classList.remove('d-none');
+        document.querySelectorAll('input[name="size"]').forEach(function(r) { r.setAttribute('required', 'required'); });
+        document.getElementById('collarId').removeAttribute('required');
+    });
+
+    document.querySelectorAll('input[name="type"]').forEach(function(r) {
+        r.addEventListener('change', function() {
+            document.getElementById('btn-add-pet').disabled = !document.querySelector('input[name="type"]:checked') || !document.getElementById('color').value;
+        });
+    });
+    document.getElementById('color').addEventListener('change', function() {
+        document.getElementById('btn-add-pet').disabled = !document.querySelector('input[name="type"]:checked') || !this.value;
+    });
+
+    document.getElementById('add-pet-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var type = document.querySelector('input[name="type"]:checked');
+        var size = document.querySelector('input[name="size"]:checked');
+        if (!type || (type.value === 'Dog' && !size)) return;
+        if (type.value === 'Dog') {
+            var collarId = document.getElementById('collarId').value.replace(/\D/g, '');
+            if (collarId.length > 10) { alert('رقم الطوق حتى 10 أرقام فقط.'); return; }
+        }
+        var formData = new FormData(form);
+        formData.append('__RequestVerificationToken', getToken());
+        formData.append('type', type.value);
+        formData.append('size', size ? size.value : '');
+        formData.append('color', document.getElementById('color').value);
+        var collarEl = document.getElementById('collarId');
+        formData.append('collarId', collarEl && !collarEl.closest('.d-none') ? (collarEl.value || '') : '');
+        document.getElementById('btn-add-pet').disabled = true;
+        fetch('?handler=AddPet', { method: 'POST', body: formData, headers: { 'RequestVerificationToken': getToken(), 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(function(r) {
+                if (!r.ok) return r.text().then(function(t) { throw new Error(t || r.status); });
+                return r.text();
+            })
+            .then(function(html) {
+                document.getElementById('pet-list').innerHTML = html;
+                bindDeleteButtons();
+                form.reset();
+                document.getElementById('size-group').classList.add('d-none');
+                document.getElementById('collar-group').classList.add('d-none');
+                document.getElementById('collarId').value = '';
+                document.getElementById('btn-add-pet').disabled = true;
+            })
+            .catch(function(err) {
+                alert(err.message || 'حدث خطأ.');
+                document.getElementById('btn-add-pet').disabled = false;
+            });
+    });
+
+    bindDeleteButtons();
+})();
+</script>
+}
