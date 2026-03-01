@@ -28,7 +28,7 @@
                 <h2 class="h6 mb-0">إضافة حيوان أليف</h2>
             </div>
             <div class="card-body py-2">
-                <form id="add-pet-form" class="pets-add-form">
+                <form id="add-pet-form" class="pets-add-form" enctype="multipart/form-data">
                     <input type="hidden" name="unitNumber" value="@Model.UnitNumber" />
                     <div class="d-flex flex-wrap align-items-end gap-3 mb-2">
                         <div>
@@ -65,7 +65,14 @@
                                 }
                             </select>
                         </div>
-                        <div class="text-muted small">صورة — قريباً</div>
+                        <div>
+                            <label class="form-label small mb-0">صورة (اختياري)</label>
+                            <div class="pet-photo-zone border border-2 border-dashed rounded p-2 text-center" id="photo-zone" style="min-width:6rem; min-height:4rem; cursor:pointer;">
+                                <input type="file" name="photo" id="photo" accept="image/jpeg,image/png,image/gif,image/webp" class="d-none" />
+                                <span class="text-muted small" id="photo-placeholder">انقر أو اسحب صورة</span>
+                                <img id="photo-preview" class="d-none rounded" style="max-height:4rem; max-width:6rem;" alt="" />
+                            </div>
+                        </div>
                         <button type="submit" class="btn btn-primary btn-sm" id="btn-add-pet" disabled>إضافة</button>
                     </div>
                 </form>
@@ -82,6 +89,20 @@
     }
 </div>
 
+<div class="modal fade" id="pet-photo-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header py-2">
+                <h5 class="modal-title">صورة الحيوان</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-0">
+                <img id="pet-photo-modal-img" src="" alt="صورة الحيوان" class="img-fluid" style="max-height:80vh;" />
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 <script>
 (function () {
@@ -92,6 +113,19 @@
     function getToken() {
         if (!token) token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
         return token;
+    }
+
+    function bindViewPhotoButtons() {
+        document.querySelectorAll('.btn-view-pet-photo').forEach(function(btn) {
+            btn.onclick = function() {
+                var u = this.getAttribute('data-unit-number');
+                var id = this.getAttribute('data-pet-id');
+                if (u && id) {
+                    document.getElementById('pet-photo-modal-img').src = '?handler=Photo&unitNumber=' + encodeURIComponent(u) + '&id=' + encodeURIComponent(id);
+                    new bootstrap.Modal(document.getElementById('pet-photo-modal')).show();
+                }
+            };
+        });
     }
 
     function bindDeleteButtons() {
@@ -110,6 +144,7 @@
                         var el = document.getElementById('pet-list');
                         if (el) el.innerHTML = html;
                         bindDeleteButtons();
+                        bindViewPhotoButtons();
                         var cardCount = document.querySelectorAll('.pets-card').length;
                         if (hadMaxPets && cardCount < 5) window.location.reload();
                     }).catch(function() {});
@@ -157,6 +192,8 @@
         formData.append('color', document.getElementById('color').value);
         var collarEl = document.getElementById('collarId');
         formData.append('collarId', collarEl && !collarEl.closest('.d-none') ? (collarEl.value || '') : '');
+        var photoInput = document.getElementById('photo');
+        if (photoInput.files && photoInput.files[0]) formData.append('photo', photoInput.files[0]);
         document.getElementById('btn-add-pet').disabled = true;
         fetch('?handler=AddPet', { method: 'POST', body: formData, headers: { 'RequestVerificationToken': getToken(), 'X-Requested-With': 'XMLHttpRequest' } })
             .then(function(r) {
@@ -164,13 +201,19 @@
                 return r.text();
             })
             .then(function(html) {
+                var hadPhoto = photoInput.files && photoInput.files.length > 0;
                 document.getElementById('pet-list').innerHTML = html;
                 bindDeleteButtons();
+                bindViewPhotoButtons();
                 form.reset();
+                document.getElementById('photo-preview').classList.add('d-none');
+                document.getElementById('photo-placeholder').classList.remove('d-none');
+                document.getElementById('photo').value = '';
                 document.getElementById('size-group').classList.add('d-none');
                 document.getElementById('collar-group').classList.add('d-none');
                 document.getElementById('collarId').value = '';
                 document.getElementById('btn-add-pet').disabled = true;
+                if (hadPhoto) window.location.reload();
             })
             .catch(function(err) {
                 alert(err.message || 'حدث خطأ.');
@@ -178,7 +221,23 @@
             });
     });
 
+    document.getElementById('photo-zone').addEventListener('click', function() { document.getElementById('photo').click(); });
+    document.getElementById('photo').addEventListener('change', function() {
+        var f = this.files && this.files[0];
+        var preview = document.getElementById('photo-preview');
+        var placeholder = document.getElementById('photo-placeholder');
+        if (f && f.type.startsWith('image/')) {
+            var r = new FileReader();
+            r.onload = function() { preview.src = r.result; preview.classList.remove('d-none'); placeholder.classList.add('d-none'); };
+            r.readAsDataURL(f);
+        } else {
+            preview.classList.add('d-none');
+            placeholder.classList.remove('d-none');
+        }
+    });
+
     bindDeleteButtons();
+    bindViewPhotoButtons();
 })();
 </script>
 }

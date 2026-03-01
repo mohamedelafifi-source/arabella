@@ -28,7 +28,14 @@
                                 }
                             </div>
                             <div class="d-flex gap-1">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" disabled title="قريباً — صورة">عرض الصورة</button>
+                                @if (!string.IsNullOrEmpty(pet.PhotoUrl))
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-view-pet-photo" data-unit-number="@Model.UnitNumber" data-pet-id="@pet.Id" title="عرض الصورة">عرض الصورة</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" disabled title="لا توجد صورة">عرض الصورة</button>
+                                }
                                 @if (!Model.IsViewOnly)
                                 {
                                     <button type="button" class="btn btn-sm btn-danger btn-delete-pet" data-id="@pet.Id" data-unit="@Model.UnitNumber">حذف</button>

@@ -53,7 +53,11 @@ C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\arabella.deps.json
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\arabella.runtimeconfig.json
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\arabella.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\arabella.pdb
+C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Azure.Core.dll
+C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Azure.Storage.Blobs.dll
+C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Azure.Storage.Common.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Humanizer.dll
+C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Microsoft.Build.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Microsoft.Build.Framework.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Microsoft.Build.Tasks.Core.dll
@@ -77,6 +81,7 @@ C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\Newtonsoft.Json.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\SQLitePCLRaw.batteries_v2.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\SQLitePCLRaw.core.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.ClientModel.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.CodeDom.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Composition.AttributedModel.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Composition.Convention.dll
@@ -85,6 +90,8 @@ C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Composition.Run
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Composition.TypedParts.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Configuration.ConfigurationManager.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Formats.Nrbf.dll
+C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.IO.Hashing.dll
+C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Memory.Data.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Reflection.MetadataLoadContext.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Resources.Extensions.dll
 C:\Users\asus\desktop\arabella\arabella\bin\Debug\net10.0\System.Security.Cryptography.ProtectedData.dll

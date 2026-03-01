@@ -66,6 +66,7 @@ public class AppDbContext : DbContext
             e.Property(p => p.Size).HasMaxLength(20);
             e.Property(p => p.Color).HasMaxLength(50);
             e.Property(p => p.PetId).HasMaxLength(10);
+            e.Property(p => p.PhotoUrl).HasMaxLength(512);
             e.HasOne(p => p.Unit).WithMany(u => u.Pets).HasForeignKey(p => p.UnitNumber).OnDelete(DeleteBehavior.Cascade);
         });
 
