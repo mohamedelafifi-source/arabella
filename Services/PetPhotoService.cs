@@ -11,9 +11,16 @@ public class PetPhotoService : IPetPhotoService
 
     public PetPhotoService(IConfiguration configuration, ILogger<PetPhotoService> logger)
     {
-        _connectionString = configuration["AzureStorage:ConnectionString"] ?? "";
-        _containerName = configuration["AzureStorage:ContainerName"] ?? "pet-photos";
+        // App settings: AzureStorage__ConnectionString. Or Connection strings: name "AzureStorage"
+        var raw = configuration["AzureStorage:ConnectionString"]
+            ?? configuration.GetConnectionString("AzureStorage")
+            ?? "";
+        _connectionString = raw.Trim();
+        _containerName = (configuration["AzureStorage:ContainerName"] ?? "pet-photos").Trim();
         _logger = logger;
+        _logger.LogInformation("PetPhotoService: Azure Storage {Status} (ConnectionString length={Len})",
+            string.IsNullOrWhiteSpace(_connectionString) ? "NOT configured" : "configured",
+            string.IsNullOrWhiteSpace(_connectionString) ? 0 : _connectionString.Length);
     }
 
     public bool IsConfigured => !string.IsNullOrWhiteSpace(_connectionString);

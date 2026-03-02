@@ -143,9 +143,10 @@ public class IndexModel : PageModel
             else
             {
                 _logger.LogWarning("AddPet: photo upload failed. Error={Error}", result.ErrorMessage);
-                var message = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment() && !string.IsNullOrEmpty(result.ErrorMessage)
-                    ? "Photo upload failed. " + result.ErrorMessage
-                    : "Photo upload failed. Check Azure Storage settings.";
+                // Always show the real error so user can fix (e.g. "not configured" vs "auth failed")
+                var message = string.IsNullOrEmpty(result.ErrorMessage)
+                    ? "Photo upload failed. Check Azure Storage settings."
+                    : "Photo upload failed. " + result.ErrorMessage;
                 return BadRequest(message);
             }
         }

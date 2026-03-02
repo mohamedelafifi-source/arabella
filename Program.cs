@@ -18,6 +18,11 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+// Log whether Azure Storage is configured (helps troubleshoot photo upload on Azure)
+var azureConn = builder.Configuration["AzureStorage:ConnectionString"];
+var azureConfigured = !string.IsNullOrWhiteSpace(azureConn);
+app.Logger.LogInformation("Azure Storage for pet photos: {Configured}", azureConfigured ? "configured" : "NOT configured (set AzureStorage__ConnectionString in App settings)");
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
