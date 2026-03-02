@@ -1,0 +1,25 @@
+@page
+@model arabella.Pages.AboutModel
+@{
+    ViewData["Title"] = "عن أرابيلا";
+    Layout = "_LayoutArabella";
+}
+
+<div class="container">
+    <h1 class="mb-3">عن تطبيق أرابيلا</h1>
+
+    <p class="mb-2">
+        تطبيق بسيط لإدارة وحدات مجمّع أرابيلا (بيانات، بحث، حيوانات أليفة، وغيرها).
+    </p>
+
+    <ul class="list-unstyled mb-3">
+        <li><strong>الإصدار:</strong> @Model.Version</li>
+        <li><strong>بيئة التشغيل:</strong> @Model.EnvironmentName</li>
+    </ul>
+
+    <p class="text-muted small">
+        تم تطويره للاستخدام الداخلي في المجمّع، مع واجهة عربية واتجاه من اليمين إلى اليسار.
+    </p>
+
+    <a asp-page="/Home" class="btn btn-outline-secondary mt-3">العودة للقائمة الرئيسية</a>
+</div>
