@@ -38,6 +38,14 @@
     <div class="units-form-card">
         <h2>@(Model.Current == null ? "وحدة جديدة" : "الوحدة الحالية")</h2>
         <form id="save-form" method="post" asp-page-handler="Save">
+            @if (Model.Current == null)
+            {
+                <input type="hidden" name="IsNewUnit" value="true" />
+            }
+            @if (TempData["UnitNumberError"] != null)
+            {
+                <div class="alert alert-danger mb-2" role="alert">@TempData["UnitNumberError"]</div>
+            }
             <div class="row g-2 mb-2">
                 <div class="col-md-4">
                     <label class="form-label">رقم الوحدة</label>

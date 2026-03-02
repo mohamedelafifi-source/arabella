@@ -12,10 +12,11 @@ namespace arabella.Pages.Units.Pets;
 public class IndexModel : PageModel
 {
     private const int MaxPetsPerUnit = 5;
+    /// <summary>Pet/dog colors in Arabic for dropdown and display.</summary>
     public static readonly string[] PetColors = new[]
     {
-        "White", "Beige", "Gray", "Light Gold", "Dark Gold",
-        "Brown", "Black", "White and brown", "White and black"
+        "أبيض", "بيج", "رمادي", "ذهبي فاتح", "ذهبي غامق",
+        "بني", "أسود", "أبيض وبني", "أبيض وأسود"
     };
 
     private readonly AppDbContext _db;
@@ -102,7 +103,7 @@ public class IndexModel : PageModel
         }
 
         color = (color ?? "").Trim();
-        if (string.IsNullOrEmpty(color))
+        if (string.IsNullOrEmpty(color) || !PetColors.Contains(color, StringComparer.Ordinal))
             return BadRequest("Choose a color.");
 
         var pet = new Pet

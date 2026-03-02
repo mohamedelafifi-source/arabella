@@ -6,6 +6,107 @@
 }
 <div class="container">
     <h1 class="mb-3">بحث</h1>
-    <p class="text-muted">قريباً</p>
-    <a asp-page="/Home" class="btn btn-outline-secondary">العودة للقائمة الرئيسية</a>
+    <a asp-page="/Home" class="btn btn-outline-secondary mb-3">العودة للقائمة الرئيسية</a>
+
+    <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="by-pet-tab" data-bs-toggle="tab" data-bs-target="#by-pet" type="button" role="tab">بحث بالحيوان الأليف</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link disabled" id="by-phone-tab" type="button" role="tab" title="قريباً">بحث برقم الهاتف (قريباً)</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="by-pet" role="tabpanel">
+            @if (TempData["SearchError"] != null)
+            {
+                <div class="alert alert-danger">@TempData["SearchError"]</div>
+            }
+            <div class="card mb-4">
+                <div class="card-header py-2">
+                    <h2 class="h6 mb-0">معايير البحث — حيوان أليف</h2>
+                </div>
+                <div class="card-body py-3">
+                    <form method="post" asp-page-handler="SearchByPet" class="row g-3 align-items-end">
+                        <div class="col-auto">
+                            <label class="form-label small mb-0">نوع الحيوان <span class="text-danger">*</span></label>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="type" id="type-cat" value="Cat" required @(Model.PetType == "Cat" ? "checked" : "")>
+                                <label class="btn btn-outline-secondary" for="type-cat">قط</label>
+                                <input type="radio" class="btn-check" name="type" id="type-dog" value="Dog" @(Model.PetType == "Dog" ? "checked" : "")>
+                                <label class="btn btn-outline-secondary" for="type-dog">كلب</label>
+                            </div>
+                        </div>
+                        <div class="col-auto @(Model.PetType == "Dog" ? "" : "d-none")" id="size-group">
+                            <label class="form-label small mb-0">الحجم</label>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="size" id="size-any" value="" @(string.IsNullOrEmpty(Model.PetSize) ? "checked" : "")>
+                                <label class="btn btn-outline-secondary" for="size-any">— الكل —</label>
+                                <input type="radio" class="btn-check" name="size" id="size-small" value="Small" @(Model.PetSize == "Small" ? "checked" : "")>
+                                <label class="btn btn-outline-secondary" for="size-small">صغير</label>
+                                <input type="radio" class="btn-check" name="size" id="size-medium" value="Medium" @(Model.PetSize == "Medium" ? "checked" : "")>
+                                <label class="btn btn-outline-secondary" for="size-medium">متوسط</label>
+                                <input type="radio" class="btn-check" name="size" id="size-large" value="Large" @(Model.PetSize == "Large" ? "checked" : "")>
+                                <label class="btn btn-outline-secondary" for="size-large">كبير</label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-label small mb-0" for="color">اللون</label>
+                            <select name="color" id="color" class="form-select form-select-sm" style="width:auto; min-width:9rem;">
+                                <option value="">— الكل —</option>
+                                @foreach (var c in arabella.Pages.Units.Pets.IndexModel.PetColors)
+                                {
+                                    <option value="@c" selected="@(Model.PetColor == c)">@c</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">بحث</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.SearchResults.Count > 0)
+            {
+                <div class="card">
+                    <div class="card-header py-2">
+                        <h2 class="h6 mb-0">الوحدات (@Model.SearchResults.Count)</h2>
+                    </div>
+                    <div class="card-body py-2">
+                        <p class="text-muted small mb-2">اضغط على الوحدة لعرض بياناتها.</p>
+                        <div class="list-group list-group-flush">
+                            @foreach (var unit in Model.SearchResults)
+                            {
+                                <a asp-page="/Units/Index" asp-route-unitNumber="@unit.UnitNumber" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span><strong>@unit.UnitNumber</strong> — @(string.IsNullOrEmpty(unit.OwnerName) ? "—" : unit.OwnerName)</span>
+                                    <span class="text-muted small">عرض البيانات</span>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.PetType != null)
+            {
+                <p class="text-muted">لا توجد وحدات تطابق معايير البحث.</p>
+            }
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+<script>
+(function () {
+    var typeCat = document.getElementById('type-cat');
+    var typeDog = document.getElementById('type-dog');
+    var sizeGroup = document.getElementById('size-group');
+    if (typeDog && typeCat && sizeGroup) {
+        function toggleSize() { sizeGroup.classList.toggle('d-none', !typeDog.checked); }
+        typeCat.addEventListener('change', toggleSize);
+        typeDog.addEventListener('change', toggleSize);
+    }
+})();
+</script>
+}

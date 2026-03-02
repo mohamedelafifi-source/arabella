@@ -17,7 +17,7 @@ public class IndexModel : PageModel
     public int TotalCount { get; set; }
     public bool IsViewOnly => HttpContext.Session.GetString("Role") == "ViewOnly";
 
-    public async Task<IActionResult> OnGetAsync(int? index)
+    public async Task<IActionResult> OnGetAsync(int? index, string? unitNumber)
     {
         if (HttpContext.Session.GetString("Auth") != "1")
             return RedirectToPage("/Login");
@@ -33,6 +33,11 @@ public class IndexModel : PageModel
         }
 
         var i = index ?? 0;
+        if (!string.IsNullOrWhiteSpace(unitNumber))
+        {
+            var idx = list.FindIndex(u => string.Equals(u.UnitNumber, unitNumber.Trim(), StringComparison.Ordinal));
+            if (idx >= 0) i = idx;
+        }
         if (i < 0) { CurrentIndex = -1; Current = null; return Page(); } // Add new
         if (i >= TotalCount) i = TotalCount - 1;
         CurrentIndex = i;
@@ -46,7 +51,15 @@ public class IndexModel : PageModel
         var unitNumber = input.UnitNumber?.Trim();
         if (string.IsNullOrEmpty(unitNumber)) return RedirectToPage();
 
+        var isNewUnit = string.Equals(Request.Form["IsNewUnit"].FirstOrDefault(), "true", StringComparison.OrdinalIgnoreCase);
         var exists = await _db.Units.FindAsync(unitNumber);
+
+        if (isNewUnit && exists != null)
+        {
+            TempData["UnitNumberError"] = "رقم الوحدة مستخدم مسبقاً. اختر رقماً آخر.";
+            return RedirectToPage(new { index = -1 });
+        }
+
         if (exists != null)
         {
             exists.OwnerName = input.OwnerName ?? "";
