@@ -74,7 +74,7 @@ public class AppDbContext : DbContext
         {
             e.HasKey(i => i.Id);
             e.Property(i => i.UnitNumber).HasMaxLength(10);
-            e.Property(i => i.Description).HasMaxLength(20);
+            e.Property(i => i.Type).HasMaxLength(50);
             e.HasOne(i => i.Unit).WithMany(u => u.Infractions).HasForeignKey(i => i.UnitNumber).OnDelete(DeleteBehavior.Cascade);
         });
     }

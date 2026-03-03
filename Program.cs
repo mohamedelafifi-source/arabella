@@ -45,6 +45,33 @@ using (var scope = app.Services.CreateScope())
         if (!columnNames.Contains("PhotoUrl")) { cmd.CommandText = "ALTER TABLE Pets ADD COLUMN PhotoUrl TEXT;"; cmd.ExecuteNonQuery(); }
     }
     catch (Exception) { /* Pets table may not exist yet; EnsureCreated will have created it with current schema */ }
+    // Infractions: if table has old Description column (NOT NULL), drop and recreate with new schema (no Description, Type only)
+    try
+    {
+        var conn2 = db.Database.GetDbConnection();
+        if (conn2.State != System.Data.ConnectionState.Open) conn2.Open();
+        using var cmd2 = conn2.CreateCommand();
+        cmd2.CommandText = "SELECT name FROM pragma_table_info('Infractions');";
+        var infColumns = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        using (var r2 = cmd2.ExecuteReader())
+        {
+            while (r2.Read())
+                infColumns.Add(r2.GetString(0));
+        }
+        if (infColumns.Contains("Description"))
+        {
+            cmd2.CommandText = "DROP TABLE IF EXISTS Infractions;";
+            cmd2.ExecuteNonQuery();
+            cmd2.CommandText = "CREATE TABLE Infractions (Id INTEGER PRIMARY KEY AUTOINCREMENT, UnitNumber TEXT NOT NULL, Date TEXT NOT NULL, Type TEXT NOT NULL, FOREIGN KEY(UnitNumber) REFERENCES Units(UnitNumber));";
+            cmd2.ExecuteNonQuery();
+        }
+        else if (!infColumns.Contains("Type"))
+        {
+            cmd2.CommandText = "ALTER TABLE Infractions ADD COLUMN Type TEXT;";
+            cmd2.ExecuteNonQuery();
+        }
+    }
+    catch (Exception) { /* Infractions table may not exist yet */ }
 }
 
 // Configure the HTTP request pipeline.

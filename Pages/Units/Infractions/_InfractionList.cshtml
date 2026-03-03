@@ -1,0 +1,42 @@
+@model arabella.Pages.Units.Infractions.InfractionListViewModel
+@{
+    Layout = null;
+}
+<div id="infraction-list-content">
+    @if (Model.Infractions.Count == 0)
+    {
+        <p class="text-muted mb-0">لا توجد مخالفات مسجّلة لهذه الوحدة.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>نوع المخالفة</th>
+                        @if (!Model.IsViewOnly)
+                        {
+                            <th></th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inf in Model.Infractions)
+                    {
+                        <tr data-infraction-id="@inf.Id">
+                            <td dir="ltr">@inf.Date.ToString("dd/MM/yy")</td>
+                            <td>@inf.Type</td>
+                            @if (!Model.IsViewOnly)
+                            {
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-danger btn-delete-infraction" data-id="@inf.Id" data-unit="@Model.UnitNumber">حذف</button>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

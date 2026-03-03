@@ -1,10 +1,125 @@
-@page "{unitNumber}"
+@page
 @model arabella.Pages.Units.Infractions.IndexModel
 @{
     ViewData["Title"] = "مخالفات — أرابيلا";
     Layout = "_LayoutArabella";
+    var listModel = new arabella.Pages.Units.Infractions.InfractionListViewModel { Infractions = Model.Infractions, UnitNumber = Model.UnitNumber, UnitIndex = Model.UnitIndex, IsViewOnly = Model.IsViewOnly };
 }
 <div class="container">
-    <p class="text-muted">مخالفات الوحدة @Model.UnitNumber — قريباً</p>
-    <a asp-page="/Units/Index" asp-route-index="@Model.UnitIndex" class="btn btn-outline-secondary">العودة للوحدة</a>
+    <form method="post" style="display:none;" id="antiforgery-form"></form>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <a asp-page="/Units/Index" asp-route-index="@Model.UnitIndex" class="btn btn-outline-secondary">العودة للوحدة</a>
+        <span class="text-muted">الوحدة @Model.UnitNumber</span>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header py-2">
+            <h2 class="h6 mb-0">مخالفات هذه الوحدة</h2>
+        </div>
+        <div class="card-body py-2" id="infraction-list">
+            @await Html.PartialAsync("_InfractionList", listModel)
+        </div>
+    </div>
+
+    @if (!Model.IsViewOnly && Model.Infractions.Count < 8)
+    {
+        <div class="card">
+            <div class="card-header py-2">
+                <h2 class="h6 mb-0">إضافة مخالفة</h2>
+            </div>
+            <div class="card-body py-2">
+                <form id="add-infraction-form" class="infractions-add-form">
+                    <input type="hidden" name="unitNumber" value="@Model.UnitNumber" />
+                    <div class="d-flex flex-wrap align-items-end gap-3 mb-2">
+                        <div>
+                            <label class="form-label small mb-0" for="inf-date">التاريخ</label>
+                            <input type="date" name="dateStr" id="inf-date" class="form-control form-control-sm" required style="width:auto;" />
+                        </div>
+                        <div>
+                            <label class="form-label small mb-0" for="inf-type">نوع المخالفة</label>
+                            <select name="type" id="inf-type" class="form-select form-select-sm" style="width:auto; min-width:10rem;">
+                                <option value="">— اختر —</option>
+                                @foreach (var t in IndexModel.InfractionTypes)
+                                {
+                                    <option value="@t">@t</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm" id="btn-add-infraction">إضافة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+    else if (Model.IsViewOnly)
+    {
+        <p class="text-muted small">عرض فقط — لا يمكن إضافة مخالفات.</p>
+    }
+    else if (Model.Infractions.Count >= 8)
+    {
+        <p class="text-muted small">الحد الأقصى 8 مخالفات لهذه الوحدة.</p>
+    }
 </div>
+
+@section Scripts {
+<script>
+(function () {
+    var unitNumber = '@Model.UnitNumber';
+    var hadMaxInfractions = @(Model.Infractions.Count >= 8 ? "true" : "false");
+    function getToken() {
+        var t = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        return t;
+    }
+    function bindDeleteButtons() {
+        document.querySelectorAll('.btn-delete-infraction').forEach(function(btn) {
+            btn.onclick = function() {
+                var id = this.getAttribute('data-id');
+                var u = this.getAttribute('data-unit');
+                if (!confirm('حذف هذه المخالفة؟')) return;
+                var formData = new FormData();
+                formData.append('__RequestVerificationToken', getToken());
+                formData.append('unitNumber', u);
+                formData.append('id', id);
+                fetch('?handler=DeleteInfraction', { method: 'POST', body: formData, headers: { 'RequestVerificationToken': getToken(), 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function(r) { return r.text(); })
+                    .then(function(html) {
+                        var el = document.getElementById('infraction-list');
+                        if (el) el.innerHTML = html;
+                        bindDeleteButtons();
+                        if (hadMaxInfractions && document.querySelectorAll('[data-infraction-id]').length < 8) window.location.reload();
+                    }).catch(function() {});
+            };
+        });
+    }
+    document.getElementById('add-infraction-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var dateEl = document.getElementById('inf-date');
+        var typeEl = document.getElementById('inf-type');
+        if (!dateEl.value || !typeEl.value) return;
+        var formData = new FormData(form);
+        formData.append('__RequestVerificationToken', getToken());
+        formData.append('dateStr', dateEl.value.trim());
+        formData.append('type', typeEl.value);
+        document.getElementById('btn-add-infraction').disabled = true;
+        fetch('?handler=AddInfraction', { method: 'POST', body: formData, headers: { 'RequestVerificationToken': getToken(), 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(function(r) {
+                if (!r.ok) return r.text().then(function(t) { throw new Error(t || r.status); });
+                return r.text();
+            })
+            .then(function(html) {
+                document.getElementById('infraction-list').innerHTML = html;
+                bindDeleteButtons();
+                form.reset();
+                document.getElementById('btn-add-infraction').disabled = false;
+                if (document.querySelectorAll('[data-infraction-id]').length >= 8) window.location.reload();
+            })
+            .catch(function(err) {
+                alert(err.message || 'حدث خطأ.');
+                document.getElementById('btn-add-infraction').disabled = false;
+            });
+    });
+    bindDeleteButtons();
+})();
+</script>
+}
