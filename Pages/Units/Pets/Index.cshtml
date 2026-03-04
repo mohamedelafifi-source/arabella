@@ -152,92 +152,96 @@
         });
     }
 
-    document.getElementById('type-cat').addEventListener('change', function() {
-        document.getElementById('size-group').classList.add('d-none');
-        document.getElementById('collar-group').classList.add('d-none');
-        document.querySelectorAll('input[name="size"]').forEach(function(r) { r.checked = false; r.removeAttribute('required'); });
-        document.getElementById('collarId').value = '';
-        document.getElementById('collarId').removeAttribute('required');
-    });
-    document.getElementById('type-dog').addEventListener('change', function() {
-        document.getElementById('size-group').classList.remove('d-none');
-        document.getElementById('collar-group').classList.remove('d-none');
-        document.querySelectorAll('input[name="size"]').forEach(function(r) { r.setAttribute('required', 'required'); });
-        document.getElementById('collarId').removeAttribute('required');
-    });
-
-    document.querySelectorAll('input[name="type"]').forEach(function(r) {
-        r.addEventListener('change', function() {
-            document.getElementById('btn-add-pet').disabled = !document.querySelector('input[name="type"]:checked') || !document.getElementById('color').value;
-        });
-    });
-    document.getElementById('color').addEventListener('change', function() {
-        document.getElementById('btn-add-pet').disabled = !document.querySelector('input[name="type"]:checked') || !this.value;
-    });
-
-    document.getElementById('add-pet-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var form = this;
-        var type = document.querySelector('input[name="type"]:checked');
-        var size = document.querySelector('input[name="size"]:checked');
-        if (!type || (type.value === 'Dog' && !size)) return;
-        if (type.value === 'Dog') {
-            var collarId = document.getElementById('collarId').value.replace(/\D/g, '');
-            if (collarId.length > 10) { alert('رقم الطوق حتى 10 أرقام فقط.'); return; }
-        }
-        var formData = new FormData(form);
-        formData.append('__RequestVerificationToken', getToken());
-        formData.append('type', type.value);
-        formData.append('size', size ? size.value : '');
-        formData.append('color', document.getElementById('color').value);
-        var collarEl = document.getElementById('collarId');
-        formData.append('collarId', collarEl && !collarEl.closest('.d-none') ? (collarEl.value || '') : '');
-        var photoInput = document.getElementById('photo');
-        if (photoInput.files && photoInput.files[0]) formData.append('photo', photoInput.files[0]);
-        document.getElementById('btn-add-pet').disabled = true;
-        fetch('?handler=AddPet', { method: 'POST', body: formData, headers: { 'RequestVerificationToken': getToken(), 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(function(r) {
-                if (!r.ok) return r.text().then(function(t) { throw new Error(t || r.status); });
-                return r.text();
-            })
-            .then(function(html) {
-                var hadPhoto = photoInput.files && photoInput.files.length > 0;
-                document.getElementById('pet-list').innerHTML = html;
-                bindDeleteButtons();
-                bindViewPhotoButtons();
-                form.reset();
-                document.getElementById('photo-preview').classList.add('d-none');
-                document.getElementById('photo-placeholder').classList.remove('d-none');
-                document.getElementById('photo').value = '';
-                document.getElementById('size-group').classList.add('d-none');
-                document.getElementById('collar-group').classList.add('d-none');
-                document.getElementById('collarId').value = '';
-                document.getElementById('btn-add-pet').disabled = true;
-                if (hadPhoto) window.location.reload();
-            })
-            .catch(function(err) {
-                alert(err.message || 'حدث خطأ.');
-                document.getElementById('btn-add-pet').disabled = false;
-            });
-    });
-
-    document.getElementById('photo-zone').addEventListener('click', function() { document.getElementById('photo').click(); });
-    document.getElementById('photo').addEventListener('change', function() {
-        var f = this.files && this.files[0];
-        var preview = document.getElementById('photo-preview');
-        var placeholder = document.getElementById('photo-placeholder');
-        if (f && f.type.startsWith('image/')) {
-            var r = new FileReader();
-            r.onload = function() { preview.src = r.result; preview.classList.remove('d-none'); placeholder.classList.add('d-none'); };
-            r.readAsDataURL(f);
-        } else {
-            preview.classList.add('d-none');
-            placeholder.classList.remove('d-none');
-        }
-    });
-
-    bindDeleteButtons();
+    // Always bind view-photo first so view-only users can open the photo modal (add form may be missing)
     bindViewPhotoButtons();
+    bindDeleteButtons();
+
+    var addForm = document.getElementById('add-pet-form');
+    if (addForm) {
+        document.getElementById('type-cat').addEventListener('change', function() {
+            document.getElementById('size-group').classList.add('d-none');
+            document.getElementById('collar-group').classList.add('d-none');
+            document.querySelectorAll('input[name="size"]').forEach(function(r) { r.checked = false; r.removeAttribute('required'); });
+            document.getElementById('collarId').value = '';
+            document.getElementById('collarId').removeAttribute('required');
+        });
+        document.getElementById('type-dog').addEventListener('change', function() {
+            document.getElementById('size-group').classList.remove('d-none');
+            document.getElementById('collar-group').classList.remove('d-none');
+            document.querySelectorAll('input[name="size"]').forEach(function(r) { r.setAttribute('required', 'required'); });
+            document.getElementById('collarId').removeAttribute('required');
+        });
+
+        document.querySelectorAll('input[name="type"]').forEach(function(r) {
+            r.addEventListener('change', function() {
+                document.getElementById('btn-add-pet').disabled = !document.querySelector('input[name="type"]:checked') || !document.getElementById('color').value;
+            });
+        });
+        document.getElementById('color').addEventListener('change', function() {
+            document.getElementById('btn-add-pet').disabled = !document.querySelector('input[name="type"]:checked') || !this.value;
+        });
+
+        addForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var type = document.querySelector('input[name="type"]:checked');
+            var size = document.querySelector('input[name="size"]:checked');
+            if (!type || (type.value === 'Dog' && !size)) return;
+            if (type.value === 'Dog') {
+                var collarId = document.getElementById('collarId').value.replace(/\D/g, '');
+                if (collarId.length > 10) { alert('رقم الطوق حتى 10 أرقام فقط.'); return; }
+            }
+            var formData = new FormData(form);
+            formData.append('__RequestVerificationToken', getToken());
+            formData.append('type', type.value);
+            formData.append('size', size ? size.value : '');
+            formData.append('color', document.getElementById('color').value);
+            var collarEl = document.getElementById('collarId');
+            formData.append('collarId', collarEl && !collarEl.closest('.d-none') ? (collarEl.value || '') : '');
+            var photoInput = document.getElementById('photo');
+            if (photoInput.files && photoInput.files[0]) formData.append('photo', photoInput.files[0]);
+            document.getElementById('btn-add-pet').disabled = true;
+            fetch('?handler=AddPet', { method: 'POST', body: formData, headers: { 'RequestVerificationToken': getToken(), 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(function(r) {
+                    if (!r.ok) return r.text().then(function(t) { throw new Error(t || r.status); });
+                    return r.text();
+                })
+                .then(function(html) {
+                    var hadPhoto = photoInput.files && photoInput.files.length > 0;
+                    document.getElementById('pet-list').innerHTML = html;
+                    bindDeleteButtons();
+                    bindViewPhotoButtons();
+                    form.reset();
+                    document.getElementById('photo-preview').classList.add('d-none');
+                    document.getElementById('photo-placeholder').classList.remove('d-none');
+                    document.getElementById('photo').value = '';
+                    document.getElementById('size-group').classList.add('d-none');
+                    document.getElementById('collar-group').classList.add('d-none');
+                    document.getElementById('collarId').value = '';
+                    document.getElementById('btn-add-pet').disabled = true;
+                    if (hadPhoto) window.location.reload();
+                })
+                .catch(function(err) {
+                    alert(err.message || 'حدث خطأ.');
+                    document.getElementById('btn-add-pet').disabled = false;
+                });
+        });
+
+        document.getElementById('photo-zone').addEventListener('click', function() { document.getElementById('photo').click(); });
+        document.getElementById('photo').addEventListener('change', function() {
+            var f = this.files && this.files[0];
+            var preview = document.getElementById('photo-preview');
+            var placeholder = document.getElementById('photo-placeholder');
+            if (f && f.type.startsWith('image/')) {
+                var r = new FileReader();
+                r.onload = function() { preview.src = r.result; preview.classList.remove('d-none'); placeholder.classList.add('d-none'); };
+                r.readAsDataURL(f);
+            } else {
+                preview.classList.add('d-none');
+                placeholder.classList.remove('d-none');
+            }
+        });
+    }
 })();
 </script>
 }
